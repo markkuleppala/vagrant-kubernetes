@@ -99,10 +99,11 @@ echo "[postdeployment] Install Helm, wait for the Tiller pod to get ready"
 #curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
 wget https://get.helm.sh/helm-v3.5.0-linux-amd64.tar.gz
 tar -xvf helm-v3.5.0-linux-amd64.tar.gz
-cd linux-amd64
-mv helm /usr/local/bin && mv tiller /usr/local/bin
+mv linux-amd64/helm /usr/local/bin/helm
 kubectl create clusterrolebinding permissive-binding --clusterrole=cluster-admin --user=admin --user=kubelet --group=system:serviceaccounts
 helm init --service-account default
+
+
 
 ATTEMPTS=0
 ROLLOUT_STATUS_CMD="kubectl rollout status deployment/tiller-deploy -n kube-system"
