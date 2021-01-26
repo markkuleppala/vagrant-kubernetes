@@ -96,23 +96,8 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.1.0/a
 
 echo "[postdeployment] Install Helm, wait for the Tiller pod to get ready"
 
-#curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
-wget https://get.helm.sh/helm-v3.5.0-linux-amd64.tar.gz
-tar -xvf helm-v3.5.0-linux-amd64.tar.gz
-mv linux-amd64/helm /usr/local/bin/helm
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 kubectl create clusterrolebinding permissive-binding --clusterrole=cluster-admin --user=admin --user=kubelet --group=system:serviceaccounts
-helm init --service-account default
-
-
-
-ATTEMPTS=0
-ROLLOUT_STATUS_CMD="kubectl rollout status deployment/tiller-deploy -n kube-system"
-until $ROLLOUT_STATUS_CMD || [ $ATTEMPTS -eq 60 ]; do
-  $ROLLOUT_STATUS_CMD
-  ATTEMPTS=$((attempts + 1))
-  sleep 10
-done
-
 
 echo "[postdeployment] Install a customized ingress and immediately enable sql port 1433"
 kubectl apply -f https://raw.githubusercontent.com/jacqinthebox/vagrant-kubernetes/master/ingress-mandatory.yaml
