@@ -100,9 +100,9 @@ curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bas
 kubectl create clusterrolebinding permissive-binding --clusterrole=cluster-admin --user=admin --user=kubelet --group=system:serviceaccounts
 
 echo "[postdeployment] Install a customized ingress and immediately enable sql port 1433"
-kubectl apply -f https://raw.githubusercontent.com/jacqinthebox/vagrant-kubernetes/master/ingress-mandatory.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/baremetal/service-nodeport.yaml
-kubectl apply -f https://raw.githubusercontent.com/jacqinthebox/vagrant-kubernetes/master/sql-server-configmap.yaml
+kubectl apply -f https://raw.githubusercontent.com/markkuleppala/vagrant-kubernetes/master/ingress-mandatory.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/baremetal/deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/markkuleppala/vagrant-kubernetes/master/sql-server-configmap.yaml
 
 echo "[postdeployment] Set the Kubernetes Dashboard to NodePort"
 kubectl -n kube-system get service/kubernetes-dashboard -o yaml | sed "s/type: ClusterIP/type: NodePort/" | kubectl replace -f -
