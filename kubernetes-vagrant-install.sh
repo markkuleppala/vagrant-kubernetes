@@ -28,7 +28,7 @@ localAPIEndpoint:
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
 clusterName: $1
-kubernetesVersion: "v1.15.4"
+kubernetesVersion: "v1.20.0"
 networking:
   podSubnet: 10.244.0.0/16
 apiServer:
@@ -68,9 +68,10 @@ cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
 deb https://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 apt-get update
-#apt-get install -y kubelet  kubeadm kubectl
-echo "[kube-install] Installing kubeadm, kubectl and kubelet version 1.15.4"
-apt-get install -y kubectl=1.15.4-00 kubeadm=1.15.4-00 kubelet=1.15.4-00
+echo "[kube-install] Installing kubeadm, kubectl and kubelet"
+apt-get install -y kubelet kubeadm kubectl
+#echo "[kube-install] Installing kubeadm, kubectl and kubelet version 1.15.4"
+#apt-get install -y kubectl=1.15.4-00 kubeadm=1.15.4-00 kubelet=1.15.4-00
 
 echo "[kube-install] Running kubeadm"
 kubeadm init --config=kubeadm-config.yaml #--pod-network-cidr=10.244.0.0/16 
@@ -95,13 +96,13 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/
 
 echo "[postdeployment] Install Helm, wait for the Tiller pod to get ready"
 
-#curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
-wget https://get.helm.sh/helm-v2.14.3-linux-amd64.tar.gz
-tar -xvf helm-v2.14.3-linux-amd64.tar.gz
-cd linux-amd64
-mv helm /usr/local/bin && mv tiller /usr/local/bin
-kubectl create clusterrolebinding permissive-binding --clusterrole=cluster-admin --user=admin --user=kubelet --group=system:serviceaccounts
-helm init --service-account default
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
+#wget https://get.helm.sh/helm-v2.14.3-linux-amd64.tar.gz
+#tar -xvf helm-v2.14.3-linux-amd64.tar.gz
+#cd linux-amd64
+#mv helm /usr/local/bin && mv tiller /usr/local/bin
+#kubectl create clusterrolebinding permissive-binding --clusterrole=cluster-admin --user=admin --user=kubelet --group=system:serviceaccounts
+#helm init --service-account default
 
 ATTEMPTS=0
 ROLLOUT_STATUS_CMD="kubectl rollout status deployment/tiller-deploy -n kube-system"
