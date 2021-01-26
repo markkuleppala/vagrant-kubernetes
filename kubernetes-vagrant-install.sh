@@ -57,8 +57,9 @@ cp /etc/fstab ~/fstab.old
 sed -i '2 d' /etc/fstab
 
 echo "[prepare] Installing Docker!"
-apt-get update && apt-get install -y apt-transport-https ca-certificates software-properties-common docker.io
-systemctl start docker &&  systemctl enable docker
+#apt-get update && apt-get install -y apt-transport-https ca-certificates software-properties-common docker.io
+apt-get update && apt-get install -y apt-transport-https ca-certificates software-properties-common docker-ce docker-ce-cli containerd.io
+systemctl start docker && systemctl enable docker
 usermod -aG docker $USER
 
 echo "[kube-install] Installing Kubernetes"
